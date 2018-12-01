@@ -1,12 +1,11 @@
 package com.epam.edu.spring.core.homework.service;
 
-import java.time.LocalDateTime;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.epam.edu.spring.core.homework.domain.Event;
 import com.epam.edu.spring.core.homework.domain.User;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
+
+import java.time.LocalDateTime;
 
 /**
  * @author Yuriy_Tkach
@@ -27,6 +26,6 @@ public interface DiscountService {
      *            Number of tickets that user buys
      * @return discount value from 0 to 100
      */
-    byte getDiscount(@Nullable User user, @Nonnull Event event, @Nonnull LocalDateTime airDateTime, long numberOfTickets);
+    byte getDiscount(@Nullable User user, @NonNull Event event, @NonNull LocalDateTime airDateTime, long numberOfTickets);
 
 }

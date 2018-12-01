@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="userService" class="com.epam.edu.spring.core.homework.service.UserServiceImpl" />
+
+    <!--<import resource="shell.xml"/>-->
+
+    <!--<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">-->
+        <!--<property name="locations">-->
+            <!--<list>-->
+                <!--<value>classpath:client.properties</value>-->
+                <!--<value>classpath:loggers.properties</value>-->
+            <!--</list>-->
+        <!--</property>-->
+        <!--<property name="ignoreResourceNotFound" value="true"/>-->
+        <!--<property name="systemPropertiesMode" value="2"/>-->
+    <!--</bean>-->
+
+
+    <!---->
+    <!--<bean id="client" class="com.epam.edu.spring.core.Client"-->
+          <!--c:fullName="${name}"-->
+          <!--c:id="${id}"-->
+          <!--p:greeting="${greeting}"-->
+    <!--/>-->
+    <!--<bean id="client" class="com.epam.edu.spring.core.Client">-->
+    <!--<property name="greeting" value="${greeting}" />-->
+    <!--<constructor-arg value="${id}"/>-->
+    <!--<constructor-arg value="${name}"/>-->
+    <!--</bean>-->
+
+    <!--<util:map id="loggerMap"> &lt;!&ndash;bean can be reused&ndash;&gt;-->
+        <!--<entry key="INFO" value-ref="consoleEventLogger"/>-->
+        <!--<entry key="ERROR" value-ref="combinedEventLogger"/>-->
+    <!--</util:map>-->
+
+    <!--<bean id="app" class="com.epam.edu.spring.core.App"-->
+          <!--c:client-ref="client"-->
+          <!--c:defaultLogger-ref="cacheFileEventLogger"-->
+          <!--c:eventTypeLoggers-ref="loggerMap"-->
+    <!--/>-->
+
+    <!--<bean id="app" class="com.epam.edu.spring.core.App">-->
+    <!--<constructor-arg ref="client"/>-->
+    <!--<constructor-arg name="defaultLogger" ref="cacheFileEventLogger"/>-->
+    <!--<constructor-arg>-->
+    <!--<map>-->
+    <!--<entry key="INFO" value-ref="consoleEventLogger"/>-->
+    <!--<entry key="ERROR" value-ref="combinedEventLogger"/>-->
+    <!--</map>-->
+    <!--</constructor-arg>-->
+    <!--</bean>-->
+
+</beans>

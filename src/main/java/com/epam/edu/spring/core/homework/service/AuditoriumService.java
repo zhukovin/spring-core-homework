@@ -1,11 +1,10 @@
 package com.epam.edu.spring.core.homework.service;
 
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.epam.edu.spring.core.homework.domain.Auditorium;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
+
+import java.util.Set;
 
 /**
  * @author Yuriy_Tkach
@@ -17,7 +16,7 @@ public interface AuditoriumService {
      * 
      * @return set of all auditoriums
      */
-    public @Nonnull Set<Auditorium> getAll();
+    @NonNull Set<Auditorium> getAll();
 
     /**
      * Finding auditorium by name
@@ -26,6 +25,6 @@ public interface AuditoriumService {
      *            Name of the auditorium
      * @return found auditorium or <code>null</code>
      */
-    public @Nullable Auditorium getByName(@Nonnull String name);
+    @Nullable Auditorium getByName(@NonNull String name);
 
 }

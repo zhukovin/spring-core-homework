@@ -1,14 +1,13 @@
 package com.epam.edu.spring.core.homework.service;
 
-import java.time.LocalDateTime;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.epam.edu.spring.core.homework.domain.Event;
 import com.epam.edu.spring.core.homework.domain.Ticket;
 import com.epam.edu.spring.core.homework.domain.User;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
+
+import java.time.LocalDateTime;
+import java.util.Set;
 
 /**
  * @author Yuriy_Tkach
@@ -30,8 +29,8 @@ public interface BookingService {
      *            Set of seat numbers that user wants to buy
      * @return total price
      */
-    public double getTicketsPrice(@Nonnull Event event, @Nonnull LocalDateTime dateTime, @Nullable User user,
-            @Nonnull Set<Long> seats);
+    double getTicketsPrice(@NonNull Event event, @NonNull LocalDateTime dateTime, @Nullable User user,
+                                  @NonNull Set<Long> seats);
 
     /**
      * Books tickets in internal system. If user is not
@@ -40,7 +39,7 @@ public interface BookingService {
      * @param tickets
      *            Set of tickets
      */
-    public void bookTickets(@Nonnull Set<Ticket> tickets);
+    void bookTickets(@NonNull Set<Ticket> tickets);
 
     /**
      * Getting all purchased tickets for event on specific air date and time
@@ -51,6 +50,6 @@ public interface BookingService {
      *            Date and time of airing of event
      * @return set of all purchased tickets
      */
-    public @Nonnull Set<Ticket> getPurchasedTicketsForEvent(@Nonnull Event event, @Nonnull LocalDateTime dateTime);
+    @NonNull Set<Ticket> getPurchasedTicketsForEvent(@NonNull Event event, @NonNull LocalDateTime dateTime);
 
 }

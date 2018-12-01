@@ -1,22 +1,20 @@
 package com.epam.edu.spring.core.homework.service;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.epam.edu.spring.core.homework.domain.User;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 
-/**
- * @author Yuriy_Tkach
- */
 public interface UserService extends AbstractDomainObjectService<User> {
 
     /**
      * Finding user by email
-     * 
-     * @param email
-     *            Email of the user
+     *
+     * @param email Email of the user
      * @return found user or <code>null</code>
      */
-    public @Nullable User getUserByEmail(@Nonnull String email);
+    @Nullable
+    User getUserByEmail(@NonNull String email);
+
+    User createUser(String firstName, String lastName, String email);
 
 }
