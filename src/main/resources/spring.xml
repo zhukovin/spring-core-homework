@@ -5,6 +5,7 @@
             http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <import resource="pricing-strategies.xml"/>
+    <import resource="discount-strategies.xml"/>
 
     <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="locations">
@@ -65,6 +66,8 @@
                 <ref bean="movieRatingPricingStrategy"/>
             </list>
         </constructor-arg>
+        <constructor-arg ref="userService"/>
+        <constructor-arg ref="discountService"/>
     </bean>
 
 

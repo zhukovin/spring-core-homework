@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="discountService" class="com.epam.edu.spring.core.homework.service.DiscountServiceImpl">
+        <constructor-arg>
+            <list>
+                <ref bean="birthdayDiscountStrategy"/>
+                <ref bean="everyTenthDiscountStrategy"/>
+            </list>
+        </constructor-arg>
+    </bean>
+
+
+    <bean id="birthdayDiscountStrategy" class="com.epam.edu.spring.core.homework.service.discount.BirthdayDiscountStrategy"/>
+    <bean id="everyTenthDiscountStrategy"
+          class="com.epam.edu.spring.core.homework.service.discount.EveryTenthTicketDiscountStrategy"/>
+
+</beans>

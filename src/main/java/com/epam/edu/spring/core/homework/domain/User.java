@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
 import java.util.NavigableSet;
 import java.util.TreeSet;
 
@@ -14,5 +15,6 @@ public class User extends DomainObject {
     private String firstName;
     private String lastName;
     private String email;
+    private LocalDateTime birthday;
     private NavigableSet<Ticket> tickets = new TreeSet<>();
 }

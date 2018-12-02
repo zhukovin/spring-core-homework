@@ -18,12 +18,13 @@ public class BookingServiceImpl implements BookingService {
 
     private final List<PricingStrategy> pricingStrategies;
     private final UserService userService;
+    private final DiscountService discountService;
 
     @Override
     public double getTicketsPrice(Event event, LocalDateTime dateTime, User user, Auditorium auditorium, Set<Long> seats) {
         return pricingStrategies.stream()
             .map(strategy -> strategy.price(event, dateTime, user, auditorium, seats))
-            .reduce(0d, Double::sum);
+            .reduce(Double::sum).orElse(0d);
     }
 
     @Override

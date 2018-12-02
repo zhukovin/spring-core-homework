@@ -26,6 +26,6 @@ public interface DiscountService {
      *            Number of tickets that user buys
      * @return discount value from 0 to 100
      */
-    byte getDiscount(@Nullable User user, @NonNull Event event, @NonNull LocalDateTime airDateTime, long numberOfTickets);
+    int getDiscount(@Nullable User user, @NonNull Event event, @NonNull LocalDateTime airDateTime, long numberOfTickets);
 
 }

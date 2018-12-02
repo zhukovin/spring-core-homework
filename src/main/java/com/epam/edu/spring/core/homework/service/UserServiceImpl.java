@@ -3,6 +3,8 @@ package com.epam.edu.spring.core.homework.service;
 import com.epam.edu.spring.core.homework.domain.User;
 import org.springframework.beans.factory.BeanFactory;
 
+import static java.time.LocalDateTime.now;
+
 
 public class UserServiceImpl extends AbstractDomainObjectServiceImpl<User> implements UserService {
 
@@ -25,6 +27,7 @@ public class UserServiceImpl extends AbstractDomainObjectServiceImpl<User> imple
         user.setFirstName(firstName);
         user.setLastName(lastName);
         user.setEmail(email);
+        user.setBirthday(now()); // fake birthday to ease testing
         save(user);
         return user;
     }
