@@ -1,5 +1,6 @@
 package com.epam.edu.spring.core.homework.service;
 
+import com.epam.edu.spring.core.homework.domain.Auditorium;
 import com.epam.edu.spring.core.homework.domain.Event;
 import com.epam.edu.spring.core.homework.domain.Ticket;
 import com.epam.edu.spring.core.homework.domain.User;
@@ -29,7 +30,7 @@ public interface BookingService {
      *            Set of seat numbers that user wants to buy
      * @return total price
      */
-    double getTicketsPrice(@NonNull Event event, @NonNull LocalDateTime dateTime, @Nullable User user,
+    double getTicketsPrice(@NonNull Event event, @NonNull LocalDateTime dateTime, @Nullable User user, Auditorium auditorium,
                                   @NonNull Set<Long> seats);
 
     /**

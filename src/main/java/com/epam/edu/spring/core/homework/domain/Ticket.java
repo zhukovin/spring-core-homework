@@ -1,43 +1,18 @@
 package com.epam.edu.spring.core.homework.domain;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-/**
- * @author Yuriy_Tkach
- */
+@RequiredArgsConstructor
+@Getter
 public class Ticket extends DomainObject implements Comparable<Ticket> {
-
-    private User user;
-
-    private Event event;
-
-    private LocalDateTime dateTime;
-
-    private long seat;
-
-    public Ticket(User user, Event event, LocalDateTime dateTime, long seat) {
-        this.user = user;
-        this.event = event;
-        this.dateTime = dateTime;
-        this.seat = seat;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public Event getEvent() {
-        return event;
-    }
-
-    public LocalDateTime getDateTime() {
-        return dateTime;
-    }
-
-    public long getSeat() {
-        return seat;
-    }
+    private final User user;
+    private final Event event;
+    private final LocalDateTime dateTime;
+    private final long seat;
 
     @Override
     public int hashCode() {
@@ -70,10 +45,7 @@ public class Ticket extends DomainObject implements Comparable<Ticket> {
         } else if (!event.equals(other.event)) {
             return false;
         }
-        if (seat != other.seat) {
-            return false;
-        }
-        return true;
+        return seat == other.seat;
     }
 
     @Override

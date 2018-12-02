@@ -4,6 +4,8 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
             http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+    <import resource="pricing-strategies.xml"/>
+
     <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="locations">
             <list>
@@ -52,6 +54,16 @@
             <bean class="com.epam.edu.spring.core.homework.domain.VipSeats">
                 <constructor-arg value="${a2.vipSeats}"/>
             </bean>
+        </constructor-arg>
+    </bean>
+
+    <bean id="bookingService" class="com.epam.edu.spring.core.homework.service.BookingServiceImpl">
+        <constructor-arg>
+            <list>
+                <ref bean="basePricingStrategy"/>
+                <ref bean="vipSeatPricingStrategy"/>
+                <ref bean="movieRatingPricingStrategy"/>
+            </list>
         </constructor-arg>
     </bean>
 
