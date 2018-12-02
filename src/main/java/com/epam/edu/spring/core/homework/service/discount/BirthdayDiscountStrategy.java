@@ -13,8 +13,10 @@ public class BirthdayDiscountStrategy implements DiscountStrategy {
         if (user == null)
             return 0;
 
-        if (DAYS.between(airDateTime, user.getBirthday()) <= 5)
+        if (DAYS.between(airDateTime, user.getBirthday()) <= 5) {
+            System.out.println("You get 5% discount because it's your birthday!");
             return 5; // 5%
+        }
         else
             return 0;
     }

@@ -22,6 +22,25 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public double getTicketsPrice(Event event, LocalDateTime dateTime, User user, Auditorium auditorium, Set<Long> seats) {
+        return discounted(totalPrice(event, dateTime, user, auditorium, seats), user, event, dateTime, seats.size());
+    }
+
+    private double discounted(Double totalPrice, User user, Event event, LocalDateTime dateTime, int numberOfTickets) {
+        if (totalPrice < 0.01)
+            return 0d;
+
+        int discountPercentage = discountService.getDiscount(user, event, dateTime, numberOfTickets);
+
+        double basePrice = event.getBasePrice(); // FIXME: we apply discount to the base price, which is not ideal
+
+        double discountAmount = basePrice / 100d * discountPercentage;
+
+        System.out.println("Applied total discount of -" + discountAmount);
+
+        return totalPrice - discountAmount;
+    }
+
+    private Double totalPrice(Event event, LocalDateTime dateTime, User user, Auditorium auditorium, Set<Long> seats) {
         return pricingStrategies.stream()
             .map(strategy -> strategy.price(event, dateTime, user, auditorium, seats))
             .reduce(Double::sum).orElse(0d);
