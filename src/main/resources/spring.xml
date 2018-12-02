@@ -4,6 +4,16 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
             http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:auditorium.properties</value>
+            </list>
+        </property>
+        <property name="ignoreResourceNotFound" value="true"/>
+        <property name="systemPropertiesMode" value="2"/>
+    </bean>
+
     <bean id="beanFactory"
           class="com.epam.edu.spring.core.homework.HomeworkApplication"
           factory-method="beanFactory"/>
@@ -16,21 +26,31 @@
         <constructor-arg ref="beanFactory"/>
     </bean>
 
+    <bean id="auditoriumService" class="com.epam.edu.spring.core.homework.service.AuditoriumServiceImpl">
+        <constructor-arg>
+            <list>
+                <ref bean="auditorium1"/>
+                <ref bean="auditorium2"/>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <bean id="auditorium1" class="com.epam.edu.spring.core.homework.domain.Auditorium">
+        <constructor-arg value="${a1.name}"/>
+        <constructor-arg value="${a1.seats}"/>
+    </bean>
+
+    <bean id="auditorium2" class="com.epam.edu.spring.core.homework.domain.Auditorium">
+        <constructor-arg value="${a2.name}"/>
+        <constructor-arg value="${a2.seats}"/>
+    </bean>
+
+
     <bean id="user" class="com.epam.edu.spring.core.homework.domain.User" scope="prototype"/>
     <bean id="event" class="com.epam.edu.spring.core.homework.domain.Event" scope="prototype"/>
 
     <!--<import resource="shell.xml"/>-->
 
-    <!--<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">-->
-        <!--<property name="locations">-->
-            <!--<list>-->
-                <!--<value>classpath:client.properties</value>-->
-                <!--<value>classpath:loggers.properties</value>-->
-            <!--</list>-->
-        <!--</property>-->
-        <!--<property name="ignoreResourceNotFound" value="true"/>-->
-        <!--<property name="systemPropertiesMode" value="2"/>-->
-    <!--</bean>-->
 
 
     <!---->

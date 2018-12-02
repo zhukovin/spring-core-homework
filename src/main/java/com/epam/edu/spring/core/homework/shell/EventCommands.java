@@ -39,7 +39,7 @@ public class EventCommands {
             return null;
         }
         eventService.remove(event);
-        System.out.println("User removed:");
+        System.out.println("Event removed:");
         return event;
     }
 
@@ -50,7 +50,7 @@ public class EventCommands {
 
     private Event reportIfNotFound(Event event) {
         if (event == null) {
-            System.out.println("User not found");
+            System.out.println("Event not found");
             return null;
         }
         return event;

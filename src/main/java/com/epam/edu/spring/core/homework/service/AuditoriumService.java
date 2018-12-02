@@ -6,9 +6,6 @@ import org.springframework.lang.Nullable;
 
 import java.util.Set;
 
-/**
- * @author Yuriy_Tkach
- */
 public interface AuditoriumService {
 
     /**
@@ -26,5 +23,4 @@ public interface AuditoriumService {
      * @return found auditorium or <code>null</code>
      */
     @Nullable Auditorium getByName(@NonNull String name);
-
 }
