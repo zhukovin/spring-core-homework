@@ -4,7 +4,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Set;
 
 @Data
@@ -12,7 +11,7 @@ import java.util.Set;
 public class Auditorium {
     private final String name;
     private final long numberOfSeats;
-    private final Set<Long> vipSeats = Collections.emptySet();
+    private final Set<Long> vipSeats;
 
     /**
      * Counts how many vip seats are there in supplied <code>seats</code>
