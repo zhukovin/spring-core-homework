@@ -6,10 +6,7 @@ import lombok.ToString;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.NavigableMap;
-import java.util.NavigableSet;
-import java.util.TreeMap;
-import java.util.TreeSet;
+import java.util.*;
 
 
 @Data
@@ -21,6 +18,7 @@ public class Event extends DomainObject {
     private double basePrice;
     private EventRating rating;
     private NavigableMap<LocalDateTime, Auditorium> auditoriums = new TreeMap<>();
+    private Set<Ticket> tickets = new HashSet<>();
 
     /**
      * Checks if event is aired on particular <code>dateTime</code> and assigns

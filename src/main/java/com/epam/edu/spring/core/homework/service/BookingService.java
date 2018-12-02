@@ -34,6 +34,12 @@ public interface BookingService {
                                   @NonNull Set<Long> seats);
 
     /**
+     * A shortcut method that puts tickets to internal shopping cart making them available for booking by {@link #bookTickets(Set)}
+     */
+    Set<Ticket> reserveTickets(@NonNull Event event, @NonNull LocalDateTime dateTime, @Nullable User user, Auditorium auditorium,
+                                  @NonNull Set<Long> seats);
+
+    /**
      * Books tickets in internal system. If user is not
      * <code>null</code> in a ticket then booked tickets are saved with it
      * 

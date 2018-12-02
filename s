@@ -4,3 +4,8 @@ list-users
 list-events
 list-auds
 get-price Matrix A1 email
+reserve-tickets Matrix A1 email
+book-tickets
+list-users
+list-events
+get-event-tickets Matrix

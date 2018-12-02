@@ -9,7 +9,8 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @Getter
 public class Ticket extends DomainObject implements Comparable<Ticket> {
-    private final User user;
+    private final String userEmail;
+//    private final User user;
     private final Event event;
     private final LocalDateTime dateTime;
     private final long seat;
@@ -64,4 +65,13 @@ public class Ticket extends DomainObject implements Comparable<Ticket> {
         return result;
     }
 
+    @Override
+    public String toString() {
+        return "Ticket{" +
+            "userEmail='" + userEmail + '\'' +
+            ", event=" + event.getName() +
+            ", dateTime=" + dateTime +
+            ", seat=" + seat +
+            '}';
+    }
 }
