@@ -4,7 +4,15 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
             http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="userService" class="com.epam.edu.spring.core.homework.service.UserServiceImpl" />
+    <bean id="beanFactory"
+          class="com.epam.edu.spring.core.homework.HomeworkApplication"
+          factory-method="beanFactory"/>
+
+    <bean id="userService" class="com.epam.edu.spring.core.homework.service.UserServiceImpl">
+        <constructor-arg ref="beanFactory"/>
+    </bean>
+
+    <bean id="user" class="com.epam.edu.spring.core.homework.domain.User" scope="prototype"/>
 
     <!--<import resource="shell.xml"/>-->
 

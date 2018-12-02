@@ -4,9 +4,6 @@ import com.epam.edu.spring.core.homework.domain.Event;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
-/**
- * @author Yuriy_Tkach
- */
 public interface EventService extends AbstractDomainObjectService<Event> {
 
     /**
