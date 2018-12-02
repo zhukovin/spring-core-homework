@@ -12,7 +12,12 @@
         <constructor-arg ref="beanFactory"/>
     </bean>
 
+    <bean id="eventService" class="com.epam.edu.spring.core.homework.service.EventServiceImpl">
+        <constructor-arg ref="beanFactory"/>
+    </bean>
+
     <bean id="user" class="com.epam.edu.spring.core.homework.domain.User" scope="prototype"/>
+    <bean id="event" class="com.epam.edu.spring.core.homework.domain.Event" scope="prototype"/>
 
     <!--<import resource="shell.xml"/>-->
 

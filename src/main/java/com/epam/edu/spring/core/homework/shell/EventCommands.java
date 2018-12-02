@@ -1,53 +1,58 @@
 package com.epam.edu.spring.core.homework.shell;
 
+import com.epam.edu.spring.core.homework.domain.Event;
+import com.epam.edu.spring.core.homework.domain.EventRating;
+import com.epam.edu.spring.core.homework.service.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
+import org.springframework.shell.standard.ShellMethod;
+
+import java.util.Collection;
 
 @RequiredArgsConstructor
 @ShellComponent
 public class EventCommands {
-/*
+
     private final EventService eventService;
 
     @ShellMethod("Add new event")
-    public Event addEvent(String firstName, String lastName, String email) {
-        User user = eventService.createUser(firstName, lastName, email);
-        System.out.println("New user created:");
-        return user;
+    public Event addEvent(String name, float basePrice, EventRating rating) {
+        Event event = eventService.createEvent(name, basePrice, rating);
+        System.out.println("New event created:");
+        return event;
     }
 
-    @ShellMethod("Find user by id")
-    public User findUser(Long userId) {
-        return reportUserFound(eventService.getById(userId));
+    @ShellMethod("Find event by id")
+    public Event findEvent(Long id) {
+        return reportIfNotFound(eventService.getById(id));
     }
 
-    @ShellMethod("Find user by email")
-    public User findUserByEmail(String email) {
-        return reportUserFound(eventService.getUserByEmail(email));
+    @ShellMethod("Find event by name")
+    public Event findEventByName(String name) {
+        return reportIfNotFound(eventService.getByName(name));
     }
 
-    @ShellMethod("Remove user by id")
-    public User removeUser(Long userId) {
-        User user = findUser(userId);
-        if (user == null) {
+    @ShellMethod("Remove event by id")
+    public Event removeEvent(Long id) {
+        Event event = findEvent(id);
+        if (event == null) {
             return null;
         }
-        eventService.remove(user);
+        eventService.remove(event);
         System.out.println("User removed:");
-        return user;
+        return event;
     }
 
-    @ShellMethod("Show the list of all users")
-    public Collection<User> listUsers() {
+    @ShellMethod("Show the list of all events")
+    public Collection<Event> listEvents() {
         return eventService.getAll();
     }
 
-    private User reportUserFound(User user) {
-        if (user == null) {
+    private Event reportIfNotFound(Event event) {
+        if (event == null) {
             System.out.println("User not found");
             return null;
         }
-        return user;
+        return event;
     }
-    */
 }

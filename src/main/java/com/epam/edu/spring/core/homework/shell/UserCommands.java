@@ -28,7 +28,7 @@ public class UserCommands {
 
     @ShellMethod("Find user by email")
     public User findUserByEmail(String email) {
-        return reportUserFound(userService.getUserByEmail(email));
+        return reportUserFound(userService.getByEmail(email));
     }
 
     @ShellMethod("Remove user by id")

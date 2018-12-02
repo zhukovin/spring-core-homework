@@ -13,7 +13,7 @@ public interface UserService extends AbstractDomainObjectService<User> {
      * @return found user or <code>null</code>
      */
     @Nullable
-    User getUserByEmail(@NonNull String email);
+    User getByEmail(@NonNull String email);
 
     User createUser(String firstName, String lastName, String email);
 

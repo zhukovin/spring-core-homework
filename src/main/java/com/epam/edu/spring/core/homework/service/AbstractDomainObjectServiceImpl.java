@@ -1,15 +1,16 @@
 package com.epam.edu.spring.core.homework.service;
 
 import com.epam.edu.spring.core.homework.domain.DomainObject;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.BeanFactory;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- *
- */
+@RequiredArgsConstructor
 public class AbstractDomainObjectServiceImpl<T extends DomainObject> implements AbstractDomainObjectService<T> {
+    protected final BeanFactory beanFactory;
 
     protected final Map<Long, T> storage = new HashMap<>();
 

@@ -2,6 +2,7 @@ package com.epam.edu.spring.core.homework.domain;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -13,6 +14,7 @@ import java.util.TreeSet;
 
 @Data
 @EqualsAndHashCode(of = {"name"}, callSuper = false)
+@ToString(callSuper = true)
 public class Event extends DomainObject {
     private String name;
     private NavigableSet<LocalDateTime> airDates = new TreeSet<>();
