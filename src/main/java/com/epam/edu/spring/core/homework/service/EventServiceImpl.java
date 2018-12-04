@@ -3,7 +3,9 @@ package com.epam.edu.spring.core.homework.service;
 import com.epam.edu.spring.core.homework.domain.Event;
 import com.epam.edu.spring.core.homework.domain.EventRating;
 import org.springframework.beans.factory.BeanFactory;
+import org.springframework.stereotype.Component;
 
+@Component
 public class EventServiceImpl extends AbstractDomainObjectServiceImpl<Event> implements EventService {
 
     public EventServiceImpl(BeanFactory beanFactory) {

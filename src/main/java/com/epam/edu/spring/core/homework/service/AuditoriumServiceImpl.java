@@ -2,13 +2,14 @@ package com.epam.edu.spring.core.homework.service;
 
 import com.epam.edu.spring.core.homework.domain.Auditorium;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.Set;
 
+@Service
 @RequiredArgsConstructor
 public class AuditoriumServiceImpl implements AuditoriumService {
 
-    // Injected by Spring
     private final Set<Auditorium> auditoria;
 
     @Override

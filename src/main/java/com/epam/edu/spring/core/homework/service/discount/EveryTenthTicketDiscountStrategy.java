@@ -2,12 +2,14 @@ package com.epam.edu.spring.core.homework.service.discount;
 
 import com.epam.edu.spring.core.homework.domain.Event;
 import com.epam.edu.spring.core.homework.domain.User;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.Set;
 
 import static java.util.Optional.ofNullable;
 
+@Component
 public class EveryTenthTicketDiscountStrategy implements DiscountStrategy {
 
     @Override

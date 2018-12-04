@@ -4,11 +4,13 @@ import com.epam.edu.spring.core.homework.domain.Event;
 import com.epam.edu.spring.core.homework.domain.User;
 import com.epam.edu.spring.core.homework.service.discount.DiscountStrategy;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.function.Function;
 
+@Component
 @RequiredArgsConstructor
 public class DiscountServiceImpl implements DiscountService {
 

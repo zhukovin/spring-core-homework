@@ -4,11 +4,12 @@ import com.epam.edu.spring.core.homework.domain.Auditorium;
 import com.epam.edu.spring.core.homework.domain.Event;
 import com.epam.edu.spring.core.homework.domain.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.Set;
 
-@RequiredArgsConstructor
+@Component
 public class VipSeatPricingStrategy implements PricingStrategy {
     @Override
     public double price(Event event, LocalDateTime dateTime, User user, Auditorium auditorium, Set<Long> seats) {

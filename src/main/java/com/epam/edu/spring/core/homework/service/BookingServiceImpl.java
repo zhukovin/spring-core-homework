@@ -6,6 +6,7 @@ import com.epam.edu.spring.core.homework.domain.Ticket;
 import com.epam.edu.spring.core.homework.domain.User;
 import com.epam.edu.spring.core.homework.service.pricing.PricingStrategy;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.Set;
 
 import static java.util.stream.Collectors.toSet;
 
+@Service
 @RequiredArgsConstructor
 public class BookingServiceImpl implements BookingService {
 

@@ -2,10 +2,12 @@ package com.epam.edu.spring.core.homework.service;
 
 import com.epam.edu.spring.core.homework.domain.User;
 import org.springframework.beans.factory.BeanFactory;
+import org.springframework.stereotype.Service;
 
 import static java.time.LocalDateTime.now;
 
 
+@Service
 public class UserServiceImpl extends AbstractDomainObjectServiceImpl<User> implements UserService {
 
     public UserServiceImpl(BeanFactory beanFactory) {
