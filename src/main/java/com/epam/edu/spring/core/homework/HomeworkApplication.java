@@ -35,7 +35,7 @@ public class HomeworkApplication {
     private final Environment env;
 
     @Autowired
-    public HomeworkApplication(Environment env) {
+    public HomeworkApplication(Environment env) { // we do not use Lombok here to demonstrate understanding of underlying autowiring
         this.env = env;
     }
 
