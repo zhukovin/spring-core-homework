@@ -31,7 +31,10 @@ public class EventStatisticsCollector {
     @Before("getEventBasePrice()")
     public void countGetBasePrice(JoinPoint joinPoint) {
         System.out.println("Somebody requested event's price.");
-        String name = ((Event) joinPoint.getTarget()).getName();
-        eventStatisticsRegistry.incrementNumberOfGetBasePriceCalls(name);
+        eventStatisticsRegistry.incrementNumberOfGetBasePriceCalls(event(joinPoint).getName());
+    }
+
+    private Event event(JoinPoint joinPoint) {
+        return (Event) joinPoint.getTarget();
     }
 }
