@@ -12,3 +12,5 @@ get-event-tickets Matrix
 stat-event-get-name Matrix
 stat-event-get-price Matrix
 stat-event-tickets Matrix
+stat-discount
+stat-user-discount
