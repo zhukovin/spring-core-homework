@@ -17,7 +17,12 @@ public class StatisticsCommands {
     }
 
     @ShellMethod("Get number of Event.getBasePrice() calls")
-    public Long statEventGetBasePrice(String eventName) {
+    public Long statEventGetPrice(String eventName) {
         return eventStatisticsRegistry.numberOfGetBasePriceCalls(eventName);
+    }
+
+    @ShellMethod("Get number of booked tickets")
+    public Long statEventTickets(String eventName) {
+        return eventStatisticsRegistry.numberOfBookedTickets(eventName);
     }
 }

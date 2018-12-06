@@ -7,6 +7,7 @@ import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 
 @Aspect
@@ -22,6 +23,9 @@ public class EventStatisticsCollector {
     @Pointcut("execution(double com.epam.edu.spring.core.homework.domain.Event.getBasePrice())")
     private void getEventBasePrice() {}
 
+    @Pointcut("execution(void com.epam.edu.spring.core.homework.domain.Event.book(..))")
+    private void book() {}
+
     @AfterReturning(pointcut = "getEventName()", returning = "eventName")
     public void countGetName(String eventName) {
         System.out.println("Somebody got event's name: " + eventName);
@@ -31,10 +35,16 @@ public class EventStatisticsCollector {
     @Before("getEventBasePrice()")
     public void countGetBasePrice(JoinPoint joinPoint) {
         System.out.println("Somebody requested event's price.");
-        eventStatisticsRegistry.incrementNumberOfGetBasePriceCalls(event(joinPoint).getName());
+        eventStatisticsRegistry.incrementNumberOfGetBasePriceCalls(eventName(joinPoint));
     }
 
-    private Event event(JoinPoint joinPoint) {
-        return (Event) joinPoint.getTarget();
+    @Before("book()")
+    public void countBookedTickets(JoinPoint joinPoint) {
+        System.out.println("Somebody booked a ticket.");
+        eventStatisticsRegistry.incrementNumberOfBookedTickets(eventName(joinPoint));
+    }
+
+    private String eventName(@NotNull JoinPoint joinPoint) {
+        return ((Event) joinPoint.getTarget()).getName();
     }
 }

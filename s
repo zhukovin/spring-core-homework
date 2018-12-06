@@ -9,3 +9,6 @@ book-tickets
 list-users
 list-events
 get-event-tickets Matrix
+stat-event-get-name Matrix
+stat-event-get-price Matrix
+stat-event-tickets Matrix

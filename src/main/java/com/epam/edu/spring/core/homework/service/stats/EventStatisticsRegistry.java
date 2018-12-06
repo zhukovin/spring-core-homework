@@ -5,4 +5,6 @@ public interface EventStatisticsRegistry {
     long numberOfGetNameCalls(String eventName);
     void incrementNumberOfGetBasePriceCalls(String eventName);
     long numberOfGetBasePriceCalls(String eventName);
+    void incrementNumberOfBookedTickets(String eventName);
+    long numberOfBookedTickets(String eventName);
 }

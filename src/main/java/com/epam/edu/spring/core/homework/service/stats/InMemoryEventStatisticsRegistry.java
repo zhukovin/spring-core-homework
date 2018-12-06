@@ -11,6 +11,7 @@ public class InMemoryEventStatisticsRegistry implements EventStatisticsRegistry 
     private static final long STARTING_VALUE = 0L;
     private Map<String, Long> getNameCounter = new HashMap<>();
     private Map<String, Long> getBasePriceCounter = new HashMap<>();
+    private Map<String, Long> bookedTicketsCounter = new HashMap<>();
 
     @Override
     public void incrementNumberOfGetNameCalls(String eventName) {
@@ -30,6 +31,16 @@ public class InMemoryEventStatisticsRegistry implements EventStatisticsRegistry 
     @Override
     public long numberOfGetBasePriceCalls(String eventName) {
         return getBasePriceCounter.getOrDefault(eventName, STARTING_VALUE);
+    }
+
+    @Override
+    public void incrementNumberOfBookedTickets(String eventName) {
+        increment(bookedTicketsCounter, eventName);
+    }
+
+    @Override
+    public long numberOfBookedTickets(String eventName) {
+        return bookedTicketsCounter.getOrDefault(eventName, STARTING_VALUE);
     }
 
     private void increment(Map<String, Long> counters, String key) {

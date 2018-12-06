@@ -61,7 +61,7 @@ public class BookingServiceImpl implements BookingService {
                     user.getTickets().add(ticket);
                 }
 
-                ticket.getEvent().getTickets().add(ticket);
+                ticket.getEvent().book(ticket);
             }
         );
     }

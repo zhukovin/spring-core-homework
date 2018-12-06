@@ -26,6 +26,10 @@ public class Event extends DomainObject {
     private NavigableMap<LocalDateTime, Auditorium> auditoriums = new TreeMap<>();
     private Set<Ticket> tickets = new HashSet<>();
 
+    public void book(Ticket ticket) {
+        tickets.add(ticket);
+    }
+
     /**
      * Checks if event is aired on particular <code>dateTime</code> and assigns
      * auditorium to it.
