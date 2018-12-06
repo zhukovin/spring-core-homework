@@ -37,7 +37,7 @@ public class BookingServiceImpl implements BookingService {
 
         double discountAmount = basePrice / 100d * discountPercentage;
 
-        System.out.println("Applied total discount of -" + discountAmount);
+        System.out.println("Applied total discount of -" + discountAmount + " coins");
 
         return totalPrice - discountAmount;
     }
