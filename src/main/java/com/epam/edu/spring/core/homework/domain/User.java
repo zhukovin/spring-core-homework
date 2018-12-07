@@ -23,4 +23,5 @@ public class User extends DomainObject {
     private String email;
     private LocalDateTime birthday;
     private NavigableSet<Ticket> tickets = new TreeSet<>();
+    private boolean isLucky;
 }
