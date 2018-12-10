@@ -1,5 +1,6 @@
 package com.epam.edu.spring.core.homework.shell;
 
+import com.epam.edu.spring.core.homework.dao.UserRegistry;
 import com.epam.edu.spring.core.homework.domain.Auditorium;
 import com.epam.edu.spring.core.homework.domain.Event;
 import com.epam.edu.spring.core.homework.domain.Ticket;
@@ -7,7 +8,6 @@ import com.epam.edu.spring.core.homework.domain.User;
 import com.epam.edu.spring.core.homework.service.AuditoriumService;
 import com.epam.edu.spring.core.homework.service.BookingService;
 import com.epam.edu.spring.core.homework.service.EventService;
-import com.epam.edu.spring.core.homework.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
@@ -24,7 +24,7 @@ public class BookingCommands {
 
     private final BookingService bookingService;
     private final EventService eventService;
-    private final UserService userService;
+    private final UserRegistry userRegistry;
     private final AuditoriumService auditoriumService;
 
     private Set<Ticket> shoppingCart;
@@ -70,7 +70,7 @@ public class BookingCommands {
     }
 
     private User user(String userEmail) {
-        return userService.getByEmail(userEmail);
+        return userRegistry.getByEmail(userEmail).orElseThrow(InternalError::new);
     }
 
     private Event event(String eventName) {

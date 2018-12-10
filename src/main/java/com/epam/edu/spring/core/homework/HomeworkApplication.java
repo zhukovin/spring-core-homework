@@ -1,8 +1,6 @@
 package com.epam.edu.spring.core.homework;
 
 import com.epam.edu.spring.core.homework.domain.Auditorium;
-import com.epam.edu.spring.core.homework.service.AuditoriumService;
-import com.epam.edu.spring.core.homework.service.AuditoriumServiceImpl;
 import com.epam.edu.spring.core.homework.service.discount.BirthdayDiscountStrategy;
 import com.epam.edu.spring.core.homework.service.discount.DiscountStrategy;
 import com.epam.edu.spring.core.homework.service.discount.EveryTenthTicketDiscountStrategy;
@@ -24,8 +22,13 @@ import java.util.Set;
 
 import static java.util.Arrays.asList;
 
-@SpringBootApplication(scanBasePackages = "com.epam.edu.spring.core.homework")
-@PropertySources({@PropertySource("classpath:auditorium01.properties"), @PropertySource("classpath:auditorium02.properties"), })
+@SpringBootApplication(
+        scanBasePackages = "com.epam.edu.spring.core.homework"
+)
+@PropertySources({
+        @PropertySource("classpath:auditorium01.properties"),
+        @PropertySource("classpath:auditorium02.properties")
+})
 public class HomeworkApplication {
 
     public static void main(String[] args) {

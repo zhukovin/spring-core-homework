@@ -12,6 +12,7 @@ import java.util.Map;
 public class AbstractDomainObjectServiceImpl<T extends DomainObject> implements AbstractDomainObjectService<T> {
     protected final BeanFactory beanFactory;
 
+
     protected final Map<Long, T> storage = new HashMap<>();
 
     @Override

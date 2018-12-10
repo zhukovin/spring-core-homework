@@ -1,5 +1,6 @@
 package com.epam.edu.spring.core.homework.service;
 
+import com.epam.edu.spring.core.homework.dao.UserRegistry;
 import com.epam.edu.spring.core.homework.domain.Auditorium;
 import com.epam.edu.spring.core.homework.domain.Event;
 import com.epam.edu.spring.core.homework.domain.Ticket;
@@ -19,7 +20,7 @@ import static java.util.stream.Collectors.toSet;
 public class BookingServiceImpl implements BookingService {
 
     private final List<PricingStrategy> pricingStrategies;
-    private final UserService userService;
+    private final UserRegistry userRegistry;
     private final DiscountService discountService;
 
     @Override
@@ -56,11 +57,10 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public void bookTickets(Set<Ticket> tickets) {
         tickets.forEach(ticket -> {
-                User user = userService.getByEmail(ticket.getUserEmail());
-                if (user != null) {
-                    user.getTickets().add(ticket);
-                }
-
+                userRegistry
+                        .getByEmail(ticket.getUserEmail())
+                        .map(User::getTickets)
+                        .ifPresent(userTickets -> userTickets.add(ticket));
                 ticket.getEvent().book(ticket);
             }
         );

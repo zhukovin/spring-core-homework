@@ -1,5 +1,6 @@
 package com.epam.edu.spring.core.homework.service;
 
+import com.epam.edu.spring.core.homework.dao.UserRegistry;
 import com.epam.edu.spring.core.homework.domain.User;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.stereotype.Service;
@@ -10,17 +11,11 @@ import static java.time.LocalDateTime.now;
 @Service
 public class UserServiceImpl extends AbstractDomainObjectServiceImpl<User> implements UserService {
 
-    public UserServiceImpl(BeanFactory beanFactory) {
-        super(beanFactory);
-    }
+    private final UserRegistry userRegistry;
 
-    @Override
-    public User getByEmail(String email) {
-        return storage.values()
-            .stream()
-            .filter(user -> user.getEmail().equals(email))
-            .findFirst()
-            .orElse(null);
+    public UserServiceImpl(BeanFactory beanFactory, UserRegistry userRegistry) {
+        super(beanFactory);
+        this.userRegistry = userRegistry;
     }
 
     @Override
@@ -30,7 +25,7 @@ public class UserServiceImpl extends AbstractDomainObjectServiceImpl<User> imple
         user.setLastName(lastName);
         user.setEmail(email);
         user.setBirthday(now()); // fake birthday to ease testing
-        save(user);
+        userRegistry.save(user);
         return user;
     }
 }
