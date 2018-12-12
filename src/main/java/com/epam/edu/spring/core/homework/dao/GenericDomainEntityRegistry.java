@@ -8,11 +8,11 @@ import java.util.Optional;
 
 @SuppressWarnings({"SqlNoDataSourceInspection", "SqlResolve"})
 @Service
-abstract class AbstractDomainObjectRegistryImpl<T extends DomainObject> implements AbstractDomainObjectRegistry<T> {
+abstract class GenericDomainEntityRegistry<T extends DomainObject> implements DomainEntityRegistry<T> {
 
     final JdbcTemplate db;
 
-    protected AbstractDomainObjectRegistryImpl(JdbcTemplate db) {
+    protected GenericDomainEntityRegistry(JdbcTemplate db) {
         this.db = db;
         createTableIfNeeded();
     }

@@ -5,17 +5,20 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Service;
 
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.Optional;
 
+import static java.sql.Statement.RETURN_GENERATED_KEYS;
 import static java.util.Optional.ofNullable;
 
 @Service
-public class UserRegistryImpl extends AbstractDomainObjectRegistryImpl<User> implements UserRegistry {
+public class UserRegistryImpl extends GenericDomainEntityRegistry<User> implements UserRegistry {
 
     @Autowired
     public UserRegistryImpl(JdbcTemplate db) {
@@ -24,7 +27,7 @@ public class UserRegistryImpl extends AbstractDomainObjectRegistryImpl<User> imp
 
     @Override
     String columnsSqlDefinition() {
-        return "firstName VARCHAR(255), lastName VARCHAR(255), email VARCHAR(255), birthday TIMESTAMP";
+        return "firstName VARCHAR(255), lastName VARCHAR(255), email VARCHAR(255) UNIQUE, birthday TIMESTAMP";
     }
 
     @Override
@@ -36,31 +39,37 @@ public class UserRegistryImpl extends AbstractDomainObjectRegistryImpl<User> imp
     }
 
     @Override
-    public User save(User desiredUser) {
-        Optional<User> persistedUser = getById(desiredUser.getId());
+    public User save(User user) {
+        Optional<User> persistedUser = getById(user.getId());
         if (persistedUser.isPresent()) {
             db.update("UPDATE " + tableName() + " SET firstName=?, lastName=?, email=? WHERE id=?",
-                    desiredUser.getFirstName(), desiredUser.getLastName(), desiredUser.getEmail(), persistedUser.get().getId());
+                    user.getFirstName(), user.getLastName(), user.getEmail(), persistedUser.get().getId());
         } else {
-            KeyHolder keyHolder = new GeneratedKeyHolder();
+            IdHolder idHolder = new IdHolder();
 
             db.update(connection -> {
                         PreparedStatement ps = connection.prepareStatement(
                                 "INSERT INTO " + tableName() + " (firstName, lastName, email, birthday) VALUES (?, ?, ?, ?)",
-                                Statement.RETURN_GENERATED_KEYS);
-                        ps.setString(1, desiredUser.getFirstName());
-                        ps.setString(2, desiredUser.getLastName());
-                        ps.setString(3, desiredUser.getEmail());
-                        ps.setTimestamp(4, Timestamp.valueOf(desiredUser.getBirthday()));
+                                RETURN_GENERATED_KEYS);
+                        ps.setString(1, user.getFirstName());
+                        ps.setString(2, user.getLastName());
+                        ps.setString(3, user.getEmail());
+                        ps.setTimestamp(4, Timestamp.valueOf(user.getBirthday()));
                         return ps;
                     },
-                    keyHolder
+                    idHolder
             );
 
-            Long id = ofNullable(keyHolder.getKey()).map(Number::longValue).orElse(-1L);
-            desiredUser.setId(id);
+            user.setId(idHolder.generatedId());
         }
-        return desiredUser;
+        return user;
+    }
+
+    private class IdHolder extends GeneratedKeyHolder {
+        @NotNull
+        private Long generatedId() {
+            return ofNullable(getKey()).map(Number::longValue).orElseThrow(InternalError::new);
+        }
     }
 
     @Override

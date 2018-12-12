@@ -5,7 +5,7 @@ import org.springframework.lang.NonNull;
 
 import java.util.Optional;
 
-public interface UserRegistry extends AbstractDomainObjectRegistry<User> {
+public interface UserRegistry extends DomainEntityRegistry<User> {
     /**
      * Finding user by email
      *
