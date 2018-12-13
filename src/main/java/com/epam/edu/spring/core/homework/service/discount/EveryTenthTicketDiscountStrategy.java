@@ -5,7 +5,7 @@ import com.epam.edu.spring.core.homework.domain.User;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.List;
 
 import static java.util.Optional.ofNullable;
 
@@ -19,6 +19,6 @@ public class EveryTenthTicketDiscountStrategy implements DiscountStrategy {
     }
 
     private int alreadyBoughtTicketsEligibleForDiscount(User user) {
-        return ofNullable(user).map(User::getTickets).map(Set::size).map(n -> n % 10).orElse(0);
+        return ofNullable(user).map(User::getTickets).map(List::size).map(n -> n % 10).orElse(0);
     }
 }

@@ -2,14 +2,17 @@ package com.epam.edu.spring.core.homework.domain;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Setter;
 import lombok.ToString;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.NavigableSet;
-import java.util.TreeSet;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
+import static lombok.AccessLevel.PRIVATE;
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
 @Component
@@ -22,6 +25,23 @@ public class User extends DomainObject {
     private String lastName;
     private String email;
     private LocalDateTime birthday;
-    private NavigableSet<Ticket> tickets = new TreeSet<>();
     private boolean isLucky;
+
+    @Setter(PRIVATE)
+    private List<Ticket> tickets = new ArrayList<>();
+
+    public List<Ticket> getTickets() {
+        return Collections.unmodifiableList(tickets);
+    }
+
+    public void addTicket(Ticket ticket) {
+        tickets.remove(ticket);
+        tickets.add(ticket);
+        ticket.setUser(this);
+    }
+
+    public void removeTicket(Ticket ticket) {
+        tickets.remove(ticket);
+        ticket.setUser(null);
+    }
 }

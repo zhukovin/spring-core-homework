@@ -1,60 +1,30 @@
 package com.epam.edu.spring.core.homework.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 
+import static java.util.Optional.ofNullable;
+
+@AllArgsConstructor
 @RequiredArgsConstructor
 @Getter
+@Setter
 public class Ticket extends DomainObject implements Comparable<Ticket> {
-    private final String userEmail;
-//    private final User user;
-    private final Event event;
-    private final LocalDateTime dateTime;
+    private User user;
+    private Event event;
+    private final LocalDateTime eventTime;
     private final long seat;
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(dateTime, event, seat);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        Ticket other = (Ticket) obj;
-        if (dateTime == null) {
-            if (other.dateTime != null) {
-                return false;
-            }
-        } else if (!dateTime.equals(other.dateTime)) {
-            return false;
-        }
-        if (event == null) {
-            if (other.event != null) {
-                return false;
-            }
-        } else if (!event.equals(other.event)) {
-            return false;
-        }
-        return seat == other.seat;
-    }
 
     @Override
     public int compareTo(Ticket other) {
         if (other == null) {
             return 1;
         }
-        int result = dateTime.compareTo(other.getDateTime());
+        int result = eventTime.compareTo(other.getEventTime());
 
         if (result == 0) {
             result = event.getName().compareTo(other.getEvent().getName());
@@ -68,10 +38,11 @@ public class Ticket extends DomainObject implements Comparable<Ticket> {
     @Override
     public String toString() {
         return "Ticket{" +
-            "userEmail='" + userEmail + '\'' +
-            ", event=" + event.getName() +
-            ", dateTime=" + dateTime +
-            ", seat=" + seat +
-            '}';
+                "id=" + getId() +
+                ", userEmail='" + ofNullable(user).map(User::getEmail).orElse("null") + '\'' +
+                ", event=" + ofNullable(event).map(Event::getName).orElse("null") +
+                ", eventTime=" + eventTime +
+                ", seat=" + seat +
+                '}';
     }
 }

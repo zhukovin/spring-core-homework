@@ -4,6 +4,9 @@ import com.epam.edu.spring.core.homework.domain.DomainObject;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Collection;
 import java.util.Optional;
 
 @SuppressWarnings({"SqlNoDataSourceInspection", "SqlResolve"})
@@ -41,6 +44,13 @@ abstract class GenericDomainEntityRegistry<T extends DomainObject> implements Do
     public Optional<T> getById(Long id) {
         if (id == null)
             return Optional.empty();
-        return Optional.ofNullable(db.queryForObject("SELECT * FROM " + tableName() + " WHERE id = ", new Object[]{id}, entityType()));
+        return db.query("SELECT * FROM " + tableName() + " WHERE id = ?", new Object[]{id}, this::newEntity).stream().findFirst();
     }
+
+    @Override
+    public Collection<T> getAll() {
+        return db.query("SELECT * FROM " + tableName(), this::newEntity);
+    }
+
+    abstract T newEntity(ResultSet rs, int rowNum) throws SQLException;
 }

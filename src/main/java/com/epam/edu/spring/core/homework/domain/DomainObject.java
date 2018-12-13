@@ -4,5 +4,5 @@ import lombok.Data;
 
 @Data
 public class DomainObject {
-    private Long id;
+    private Long id = -1L;
 }

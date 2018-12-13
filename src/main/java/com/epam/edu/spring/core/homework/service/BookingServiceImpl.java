@@ -51,16 +51,18 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public Set<Ticket> reserveTickets(Event event, LocalDateTime dateTime, User user, Auditorium auditorium, Set<Long> seats) {
-        return seats.stream().map(seat -> new Ticket(user.getEmail(), event, dateTime, seat)).collect(toSet());
+        return seats.stream().map(seat -> new Ticket(user, event, dateTime, seat)).collect(toSet());
     }
 
     @Override
     public void bookTickets(Set<Ticket> tickets) {
         tickets.forEach(ticket -> {
                 userRegistry
-                        .getByEmail(ticket.getUserEmail())
-                        .map(User::getTickets)
-                        .ifPresent(userTickets -> userTickets.add(ticket));
+                        .getByEmail(ticket.getUser().getEmail())
+                        .ifPresent(user -> {
+                            user.addTicket(ticket);
+                            userRegistry.save(user);
+                        });
                 ticket.getEvent().book(ticket);
             }
         );
@@ -69,6 +71,6 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public Set<Ticket> getPurchasedTicketsForEvent(Event event, LocalDateTime targetDateTime) {
         return event.getTickets().stream() // fake time comparison
-            .filter(ticket -> ticket.getDateTime().isBefore(targetDateTime)).collect(toSet());
+            .filter(ticket -> ticket.getEventTime().isBefore(targetDateTime)).collect(toSet());
     }
 }
