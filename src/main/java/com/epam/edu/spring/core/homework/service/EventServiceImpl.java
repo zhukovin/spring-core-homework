@@ -1,25 +1,18 @@
 package com.epam.edu.spring.core.homework.service;
 
+import com.epam.edu.spring.core.homework.dao.EventRegistry;
 import com.epam.edu.spring.core.homework.domain.Event;
 import com.epam.edu.spring.core.homework.domain.EventRating;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.stereotype.Component;
 
 @Component
-public class EventServiceImpl extends AbstractDomainObjectServiceImpl<Event> implements EventService {
+@RequiredArgsConstructor
+public class EventServiceImpl implements EventService {
 
-    public EventServiceImpl(BeanFactory beanFactory) {
-        super(beanFactory);
-    }
-
-    @Override
-    public Event getByName(String name) {
-        return storage.values()
-            .stream()
-            .filter(event -> event.getName().equals(name))
-            .findFirst()
-            .orElse(null);
-    }
+    private final BeanFactory beanFactory;
+    private final EventRegistry eventRegistry;
 
     @Override
     public Event createEvent(String name, float basePrice, EventRating rating) {
@@ -27,7 +20,6 @@ public class EventServiceImpl extends AbstractDomainObjectServiceImpl<Event> imp
         event.setName(name);
         event.setBasePrice(basePrice);
         event.setRating(rating);
-        save(event);
-        return event;
+        return eventRegistry.save(event);
     }
 }

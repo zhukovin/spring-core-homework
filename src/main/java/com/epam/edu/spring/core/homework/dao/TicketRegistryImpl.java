@@ -1,5 +1,6 @@
 package com.epam.edu.spring.core.homework.dao;
 
+import com.epam.edu.spring.core.homework.domain.Event;
 import com.epam.edu.spring.core.homework.domain.Ticket;
 import com.epam.edu.spring.core.homework.domain.User;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -81,5 +82,10 @@ public class TicketRegistryImpl extends GenericDomainEntityRegistry<Ticket> impl
     @Override
     public List<Ticket> getByUser(User user) {
         return db.query("SELECT * FROM " + tableName() + " WHERE userId = ?", new Object[]{user.getId()}, this::newEntity);
+    }
+
+    @Override
+    public List<Ticket> getByEvent(Event event) {
+        return db.query("SELECT * FROM " + tableName() + " WHERE eventId = ?", new Object[]{event.getId()}, this::newEntity);
     }
 }

@@ -2,14 +2,19 @@ package com.epam.edu.spring.core.homework.domain;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Setter;
 import lombok.ToString;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NavigableMap;
+import java.util.TreeMap;
 
+import static lombok.AccessLevel.PRIVATE;
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
 
@@ -20,14 +25,17 @@ import static org.springframework.beans.factory.config.ConfigurableBeanFactory.S
 @ToString(callSuper = true)
 public class Event extends DomainObject {
     private String name;
-    private NavigableSet<LocalDateTime> airDates = new TreeSet<>();
+    private List<LocalDateTime> airDates = new ArrayList<>();
     private double basePrice;
     private EventRating rating;
     private NavigableMap<LocalDateTime, Auditorium> auditoriums = new TreeMap<>();
-    private Set<Ticket> tickets = new HashSet<>();
+
+    @Setter(PRIVATE)
+    private List<Ticket> tickets = new ArrayList<>();
 
     public void book(Ticket ticket) {
         tickets.add(ticket);
+        ticket.setEvent(this);
     }
 
     /**

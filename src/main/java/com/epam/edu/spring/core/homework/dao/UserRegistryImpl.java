@@ -17,6 +17,7 @@ import static java.util.Optional.ofNullable;
 @Service
 public class UserRegistryImpl extends GenericDomainEntityRegistry<User> implements UserRegistry {
 
+    private static final String TABLE_COLUMNS = "firstName VARCHAR(255), lastName VARCHAR(255), email VARCHAR(255) UNIQUE, birthday TIMESTAMP";
     private final TicketRegistry ticketRegistry;
 
     @Autowired
@@ -27,7 +28,7 @@ public class UserRegistryImpl extends GenericDomainEntityRegistry<User> implemen
 
     @Override
     String columnsSqlDefinition() {
-        return "firstName VARCHAR(255), lastName VARCHAR(255), email VARCHAR(255) UNIQUE, birthday TIMESTAMP";
+        return TABLE_COLUMNS;
     }
 
     @Override
@@ -40,32 +41,35 @@ public class UserRegistryImpl extends GenericDomainEntityRegistry<User> implemen
 
     @Override
     public User save(User user) {
-        Optional<User> persistedUser = getById(user.getId());
-        if (persistedUser.isPresent()) {
-            db.update("UPDATE " + tableName() + " SET firstName=?, lastName=?, email=?, birthday=? WHERE id=?",
-                    user.getFirstName(), user.getLastName(), user.getEmail(), Timestamp.valueOf(user.getBirthday()),
-                    persistedUser.get().getId());
-        } else {
-            GeneratedId generatedId = new GeneratedId();
+        getById(user.getId()).map(existingUser -> update(existingUser, user)).orElseGet(() -> insertNew(user))
+                .getTickets().forEach(ticketRegistry::save);
+        return user;
+    }
 
-            db.update(connection -> {
-                        PreparedStatement ps = connection.prepareStatement(
-                                "INSERT INTO " + tableName() + " (firstName, lastName, email, birthday) VALUES (?, ?, ?, ?)",
-                                RETURN_GENERATED_KEYS);
-                        ps.setString(1, user.getFirstName());
-                        ps.setString(2, user.getLastName());
-                        ps.setString(3, user.getEmail());
-                        ps.setTimestamp(4, Timestamp.valueOf(user.getBirthday()));
-                        return ps;
-                    },
-                    generatedId
-            );
+    private User update(User existingUser, User user) {
+        db.update("UPDATE " + tableName() + " SET firstName=?, lastName=?, email=?, birthday=? WHERE id=?",
+                user.getFirstName(), user.getLastName(), user.getEmail(), Timestamp.valueOf(user.getBirthday()),
+                existingUser.getId());
+        return user;
+    }
 
-            user.setId(generatedId.get());
-        }
+    private User insertNew(User user) {
+        GeneratedId generatedId = new GeneratedId();
 
-        user.getTickets().forEach(ticketRegistry::save);
+        db.update(connection -> {
+                    PreparedStatement ps = connection.prepareStatement(
+                            "INSERT INTO " + tableName() + " (firstName, lastName, email, birthday) VALUES (?, ?, ?, ?)",
+                            RETURN_GENERATED_KEYS);
+                    ps.setString(1, user.getFirstName());
+                    ps.setString(2, user.getLastName());
+                    ps.setString(3, user.getEmail());
+                    ps.setTimestamp(4, Timestamp.valueOf(user.getBirthday()));
+                    return ps;
+                },
+                generatedId
+        );
 
+        user.setId(generatedId.get());
         return user;
     }
 

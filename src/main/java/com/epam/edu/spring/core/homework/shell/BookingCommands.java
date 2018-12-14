@@ -1,5 +1,6 @@
 package com.epam.edu.spring.core.homework.shell;
 
+import com.epam.edu.spring.core.homework.dao.EventRegistry;
 import com.epam.edu.spring.core.homework.dao.UserRegistry;
 import com.epam.edu.spring.core.homework.domain.Auditorium;
 import com.epam.edu.spring.core.homework.domain.Event;
@@ -7,23 +8,24 @@ import com.epam.edu.spring.core.homework.domain.Ticket;
 import com.epam.edu.spring.core.homework.domain.User;
 import com.epam.edu.spring.core.homework.service.AuditoriumService;
 import com.epam.edu.spring.core.homework.service.BookingService;
-import com.epam.edu.spring.core.homework.service.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptySet;
 
 @RequiredArgsConstructor
 @ShellComponent
 public class BookingCommands {
 
     private final BookingService bookingService;
-    private final EventService eventService;
+    private final EventRegistry eventRegistry;
     private final UserRegistry userRegistry;
     private final AuditoriumService auditoriumService;
 
@@ -31,25 +33,29 @@ public class BookingCommands {
 
     @ShellMethod("Get tickets price")
     public double getPrice(String eventName, String auditoriumName, String userEmail) {
-        return bookingService.getTicketsPrice(
-            event(eventName),
-            LocalDateTime.now(),
-            user(userEmail),
-            auditorium(auditoriumName),
-            fixedSeats());
+        return event(eventName)
+                .map(event -> bookingService.getTicketsPrice(
+                        event,
+                        LocalDateTime.now(),
+                        user(userEmail),
+                        auditorium(auditoriumName),
+                        fixedSeats()))
+                .orElse(0d);
     }
 
     @ShellMethod("Reserve tickets (put them into shopping cart)")
     public Set<Ticket> reserveTickets(String eventName, String auditoriumName, String userEmail) {
-        return shoppingCart = bookingService.reserveTickets(
-            event(eventName),
-            LocalDateTime.now(),
-            user(userEmail),
-            auditorium(auditoriumName),
-            fixedSeats());
+        return shoppingCart = event(eventName)
+                .map(event -> bookingService.reserveTickets(
+                        event,
+                        LocalDateTime.now(),
+                        user(userEmail),
+                        auditorium(auditoriumName),
+                        fixedSeats()))
+                .orElse(emptySet());
     }
 
-    @ShellMethod("Book tickets")
+    @ShellMethod("Book tickets (that are in the shopping cart)")
     public Set<Ticket> bookTickets() {
         bookingService.bookTickets(shoppingCart);
         System.out.println("Booked tickets:");
@@ -60,9 +66,8 @@ public class BookingCommands {
     public Set<Ticket> getEventTickets(String eventName/*, LocalDateTime dateTime*/) {
         LocalDateTime dateTime = LocalDateTime.now();
         System.out.println("Booked tickets for " + eventName + " event at " + dateTime);
-        return bookingService.getPurchasedTicketsForEvent(event(eventName), dateTime);
+        return event(eventName).map(event -> bookingService.getPurchasedTicketsForEvent(event, dateTime)).orElse(emptySet());
     }
-
 
 
     private Auditorium auditorium(String auditoriumName) {
@@ -73,8 +78,8 @@ public class BookingCommands {
         return userRegistry.getByEmail(userEmail).orElseThrow(InternalError::new);
     }
 
-    private Event event(String eventName) {
-        return eventService.getByName(eventName);
+    private Optional<Event> event(String eventName) {
+        return eventRegistry.getByName(eventName);
     }
 
     /**
