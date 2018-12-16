@@ -97,8 +97,8 @@ public class TicketRegistryImpl extends GenericDomainEntityRegistry<Ticket> impl
     @Override
     Ticket newEntity(ResultSet rs, int rowNum) throws SQLException {
         Ticket ticket = new Ticket(
-            rs.getString(USER_EMAIL),
             rs.getString(EVENT_NAME),
+            rs.getString(USER_EMAIL),
             rs.getTimestamp(EVENT_TIME).toLocalDateTime(),
             rs.getLong(SEAT)
         );
