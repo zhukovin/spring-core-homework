@@ -8,6 +8,11 @@ import com.epam.edu.spring.core.homework.service.pricing.BasePricingStrategy;
 import com.epam.edu.spring.core.homework.service.pricing.MovieRatingPricingStrategy;
 import com.epam.edu.spring.core.homework.service.pricing.PricingStrategy;
 import com.epam.edu.spring.core.homework.service.pricing.VipSeatPricingStrategy;
+import com.epam.edu.spring.core.homework.service.stats.DiscountStatisticsRegistry;
+import com.epam.edu.spring.core.homework.service.stats.EventStatisticsRegistry;
+import com.epam.edu.spring.core.homework.service.stats.JdbcDiscountStatisticsRegistry;
+import com.epam.edu.spring.core.homework.service.stats.JdbcEventStatisticsRegistry;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -15,6 +20,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.env.Environment;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.HashSet;
 import java.util.List;
@@ -36,10 +42,12 @@ public class HomeworkApplication {
     }
 
     private final Environment env;
+    private final BeanFactory beanFactory;
 
     @Autowired
-    public HomeworkApplication(Environment env) { // we do not use Lombok here to demonstrate understanding of underlying autowiring
+    public HomeworkApplication(Environment env, BeanFactory beanFactory) { // we do not use Lombok here to demonstrate understanding of underlying autowiring
         this.env = env;
+        this.beanFactory = beanFactory;
     }
 
     @Bean
@@ -65,6 +73,18 @@ public class HomeworkApplication {
             EveryTenthTicketDiscountStrategy everyTenthTicketDiscountStrategy
     ) {
         return asList(birthdayDiscountStrategy, everyTenthTicketDiscountStrategy);
+    }
+
+    @Bean
+    public DiscountStatisticsRegistry discountStatisticsRegistry() {
+        return new JdbcDiscountStatisticsRegistry(beanFactory.getBean(JdbcTemplate.class));
+//        return new InMemoryDiscountStatisticsRegistry();
+    }
+
+    @Bean
+    public EventStatisticsRegistry eventStatisticsRegistry() {
+        return new JdbcEventStatisticsRegistry(beanFactory.getBean(JdbcTemplate.class));
+//        return new InMemoryDiscountStatisticsRegistry();
     }
 
     private String prop(String name) {

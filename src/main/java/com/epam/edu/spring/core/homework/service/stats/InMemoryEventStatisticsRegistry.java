@@ -1,8 +1,5 @@
 package com.epam.edu.spring.core.homework.service.stats;
 
-import org.springframework.stereotype.Service;
-
-@Service
 public class InMemoryEventStatisticsRegistry implements EventStatisticsRegistry {
 
     private Counter<String> getNameCounter = new Counter<>();
