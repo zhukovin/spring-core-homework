@@ -14,10 +14,12 @@ import org.springframework.shell.standard.ShellMethod;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static java.util.Collections.emptySet;
 
 @RequiredArgsConstructor
@@ -29,7 +31,7 @@ public class BookingCommands {
     private final UserRegistry userRegistry;
     private final AuditoriumService auditoriumService;
 
-    private Set<Ticket> shoppingCart;
+    private List<Ticket> shoppingCart;
 
     @ShellMethod("Get tickets price")
     public double getPrice(String eventName, String auditoriumName, String userEmail) {
@@ -44,19 +46,19 @@ public class BookingCommands {
     }
 
     @ShellMethod("Reserve tickets (put them into shopping cart)")
-    public Set<Ticket> reserveTickets(String eventName, String auditoriumName, String userEmail) {
+    public List<Ticket> reserveTickets(String eventName, String auditoriumName, String userEmail) {
         return shoppingCart = event(eventName)
                 .map(event -> bookingService.reserveTickets(
                         event,
                         LocalDateTime.now(),
-                        user(userEmail),
+                        userEmail,
                         auditorium(auditoriumName),
                         fixedSeats()))
-                .orElse(emptySet());
+                .orElse(emptyList());
     }
 
     @ShellMethod("Book tickets (that are in the shopping cart)")
-    public Set<Ticket> bookTickets() {
+    public List<Ticket> bookTickets() {
         bookingService.bookTickets(shoppingCart);
         System.out.println("Booked tickets:");
         return shoppingCart;

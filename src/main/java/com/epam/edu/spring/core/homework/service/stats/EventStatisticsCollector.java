@@ -23,24 +23,24 @@ public class EventStatisticsCollector {
     @Pointcut("execution(double com.epam.edu.spring.core.homework.domain.Event.getBasePrice())")
     private void getEventBasePrice() {}
 
-    @Pointcut("execution(void com.epam.edu.spring.core.homework.domain.Event.book(..))")
+    @Pointcut("execution(void com.epam.edu.spring.core.homework.domain.Event.addTicket(..))")
     private void book() {}
 
     @AfterReturning(pointcut = "getEventName()", returning = "eventName")
     public void countGetName(String eventName) {
-        System.out.println("Somebody got event's name: " + eventName);
+//        System.out.println("Somebody got event's name: " + eventName);
         eventStatisticsRegistry.incrementNumberOfGetNameCalls(eventName);
     }
 
     @Before("getEventBasePrice()")
     public void countGetBasePrice(JoinPoint joinPoint) {
-        System.out.println("Somebody requested event's price.");
+//        System.out.println("Somebody requested event's price.");
         eventStatisticsRegistry.incrementNumberOfGetBasePriceCalls(eventName(joinPoint));
     }
 
     @Before("book()")
     public void countBookedTickets(JoinPoint joinPoint) {
-        System.out.println("Somebody booked a ticket.");
+//        System.out.println("Somebody booked a ticket.");
         eventStatisticsRegistry.incrementNumberOfBookedTickets(eventName(joinPoint));
     }
 

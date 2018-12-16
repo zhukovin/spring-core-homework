@@ -8,6 +8,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -34,10 +35,10 @@ public interface BookingService {
                                   @NonNull Set<Long> seats);
 
     /**
-     * A shortcut method that puts tickets to internal shopping cart making them available for booking by {@link #bookTickets(Set)}
+     * A shortcut method that puts tickets to internal shopping cart making them available for booking by {@link #bookTickets(List)}
      */
-    Set<Ticket> reserveTickets(@NonNull Event event, @NonNull LocalDateTime dateTime, @Nullable User user, Auditorium auditorium,
-                                  @NonNull Set<Long> seats);
+    List<Ticket> reserveTickets(@NonNull Event event, @NonNull LocalDateTime dateTime, @Nullable String userEmail, Auditorium auditorium,
+                                @NonNull Set<Long> seats);
 
     /**
      * Books tickets in internal system. If user is not
@@ -46,7 +47,7 @@ public interface BookingService {
      * @param tickets
      *            Set of tickets
      */
-    void bookTickets(@NonNull Set<Ticket> tickets);
+    void bookTickets(@NonNull List<Ticket> tickets);
 
     /**
      * Getting all purchased tickets for event on specific air date and time

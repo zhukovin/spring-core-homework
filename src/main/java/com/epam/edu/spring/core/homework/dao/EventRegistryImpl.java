@@ -15,12 +15,12 @@ import java.util.List;
 import java.util.Optional;
 
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
-import static java.util.Optional.ofNullable;
 
 @Service
 public class EventRegistryImpl extends GenericDomainEntityRegistry<Event> implements EventRegistry {
 
     private static final String TABLE_COLUMNS = "name VARCHAR(255), airDates VARCHAR(255), basePrice DOUBLE, rating VARCHAR(15)";
+
     private final TicketRegistry ticketRegistry;
 
     @Autowired
@@ -39,7 +39,8 @@ public class EventRegistryImpl extends GenericDomainEntityRegistry<Event> implem
         if (name == null)
             return Optional.empty();
 
-        return ofNullable(db.queryForObject("SELECT * FROM " + tableName() + " WHERE name = ?", new Object[]{name}, this::newEntity));
+        return db.query("SELECT * FROM " + tableName() + " WHERE name = ?", new Object[]{name}, this::newEntity)
+            .stream().findFirst();
     }
 
     @Override
@@ -84,7 +85,7 @@ public class EventRegistryImpl extends GenericDomainEntityRegistry<Event> implem
         event.setAirDates(listOfDates(rs.getString("airDates")));
         event.setBasePrice(rs.getDouble("basePrice"));
         event.setRating(EventRating.valueOf(rs.getString("rating")));
-        ticketRegistry.getByEvent(event).forEach(event::book);
+        ticketRegistry.getByEvent(event).forEach(event::addTicket);
         return event;
     }
 

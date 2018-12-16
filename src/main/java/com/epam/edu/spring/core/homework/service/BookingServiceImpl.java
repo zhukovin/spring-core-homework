@@ -1,5 +1,7 @@
 package com.epam.edu.spring.core.homework.service;
 
+import com.epam.edu.spring.core.homework.dao.EventRegistry;
+import com.epam.edu.spring.core.homework.dao.TicketRegistry;
 import com.epam.edu.spring.core.homework.dao.UserRegistry;
 import com.epam.edu.spring.core.homework.domain.Auditorium;
 import com.epam.edu.spring.core.homework.domain.Event;
@@ -13,6 +15,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
+import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
 @Service
@@ -21,6 +24,8 @@ public class BookingServiceImpl implements BookingService {
 
     private final List<PricingStrategy> pricingStrategies;
     private final UserRegistry userRegistry;
+    private final EventRegistry eventRegistry;
+    private final TicketRegistry ticketRegistry;
     private final DiscountService discountService;
 
     @Override
@@ -50,20 +55,18 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public Set<Ticket> reserveTickets(Event event, LocalDateTime dateTime, User user, Auditorium auditorium, Set<Long> seats) {
-        return seats.stream().map(seat -> new Ticket(user, event, dateTime, seat)).collect(toSet());
+    public List<Ticket> reserveTickets(
+        Event event, LocalDateTime dateTime, String userEmail, Auditorium auditorium, Set<Long> seats) {
+        return seats.stream().map(seat -> new Ticket(event.getName(), userEmail, dateTime, seat)).collect(toList());
     }
 
     @Override
-    public void bookTickets(Set<Ticket> tickets) {
+    public void bookTickets(List<Ticket> tickets) {
         tickets.forEach(ticket -> {
-                userRegistry
-                        .getByEmail(ticket.getUser().getEmail())
-                        .ifPresent(user -> {
-                            user.addTicket(ticket);
-                            userRegistry.save(user);
-                        });
-                ticket.getEvent().book(ticket);
+                // FIXME: this can be optimized by grouping tickets by user and getting user from registry only once (same holds for updating the user)
+                ticketRegistry.save(ticket);
+                userRegistry.getByEmail(ticket.getUserEmail()).ifPresent(user -> user.addTicket(ticket));
+                eventRegistry.getByName(ticket.getUserEmail()).ifPresent(event -> event.addTicket(ticket));
             }
         );
     }

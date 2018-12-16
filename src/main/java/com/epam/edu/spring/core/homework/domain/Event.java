@@ -33,9 +33,8 @@ public class Event extends DomainObject {
     @Setter(PRIVATE)
     private List<Ticket> tickets = new ArrayList<>();
 
-    public void book(Ticket ticket) {
+    public void addTicket(Ticket ticket) {
         tickets.add(ticket);
-        ticket.setEvent(this);
     }
 
     /**

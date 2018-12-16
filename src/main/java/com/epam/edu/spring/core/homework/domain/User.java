@@ -35,13 +35,11 @@ public class User extends DomainObject {
     }
 
     public void addTicket(Ticket ticket) {
-        tickets.remove(ticket);
-        tickets.add(ticket);
-        ticket.setUser(this);
+        if (!tickets.contains(ticket))
+            tickets.add(ticket);
     }
 
     public void removeTicket(Ticket ticket) {
         tickets.remove(ticket);
-        ticket.setUser(null);
     }
 }

@@ -18,6 +18,7 @@ import static java.util.Optional.ofNullable;
 public class UserRegistryImpl extends GenericDomainEntityRegistry<User> implements UserRegistry {
 
     private static final String TABLE_COLUMNS = "firstName VARCHAR(255), lastName VARCHAR(255), email VARCHAR(255) UNIQUE, birthday TIMESTAMP";
+
     private final TicketRegistry ticketRegistry;
 
     @Autowired
@@ -36,20 +37,26 @@ public class UserRegistryImpl extends GenericDomainEntityRegistry<User> implemen
         if (email == null)
             return Optional.empty();
 
-        return ofNullable(db.queryForObject("SELECT * FROM " + tableName() + " WHERE email = ?", new Object[]{email}, this::newEntity));
+        return db.query("SELECT * FROM " + tableName() + " WHERE email = ?", new Object[]{email}, this::newEntity)
+            .stream().findFirst();
     }
 
     @Override
     public User save(User user) {
-        getById(user.getId()).map(existingUser -> update(existingUser, user)).orElseGet(() -> insertNew(user))
-                .getTickets().forEach(ticketRegistry::save);
-        return user;
+        return existing(user).map(existingUser -> update(existingUser, user)).orElseGet(() -> insertNew(user));
+    }
+
+    private Optional<User> existing(User user) {
+        return ofNullable(getById(user.getId()).orElseGet(() -> getByEmail(user.getEmail()).orElse(null)));
     }
 
     private User update(User existingUser, User user) {
         db.update("UPDATE " + tableName() + " SET firstName=?, lastName=?, email=?, birthday=? WHERE id=?",
-                user.getFirstName(), user.getLastName(), user.getEmail(), Timestamp.valueOf(user.getBirthday()),
-                existingUser.getId());
+            user.getFirstName(),
+            user.getLastName(),
+            user.getEmail(),
+            Timestamp.valueOf(user.getBirthday()),
+            existingUser.getId());
         return user;
     }
 
@@ -57,16 +64,16 @@ public class UserRegistryImpl extends GenericDomainEntityRegistry<User> implemen
         GeneratedId generatedId = new GeneratedId();
 
         db.update(connection -> {
-                    PreparedStatement ps = connection.prepareStatement(
-                            "INSERT INTO " + tableName() + " (firstName, lastName, email, birthday) VALUES (?, ?, ?, ?)",
-                            RETURN_GENERATED_KEYS);
-                    ps.setString(1, user.getFirstName());
-                    ps.setString(2, user.getLastName());
-                    ps.setString(3, user.getEmail());
-                    ps.setTimestamp(4, Timestamp.valueOf(user.getBirthday()));
-                    return ps;
-                },
-                generatedId
+                PreparedStatement ps = connection.prepareStatement(
+                    "INSERT INTO " + tableName() + " (firstName, lastName, email, birthday) VALUES (?, ?, ?, ?)",
+                    RETURN_GENERATED_KEYS);
+                ps.setString(1, user.getFirstName());
+                ps.setString(2, user.getLastName());
+                ps.setString(3, user.getEmail());
+                ps.setTimestamp(4, Timestamp.valueOf(user.getBirthday()));
+                return ps;
+            },
+            generatedId
         );
 
         user.setId(generatedId.get());
