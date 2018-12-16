@@ -19,7 +19,16 @@ import static java.sql.Statement.RETURN_GENERATED_KEYS;
 @Service
 public class EventRegistryImpl extends GenericDomainEntityRegistry<Event> implements EventRegistry {
 
-    private static final String TABLE_COLUMNS = "name VARCHAR(255), airDates VARCHAR(255), basePrice DOUBLE, rating VARCHAR(15)";
+    private static final String NAME = "name";
+    private static final String AIR_DATES = "airDates";
+    private static final String BASE_PRICE = "basePrice";
+    private static final String RATING = "rating";
+
+    private static final String TABLE_COLUMNS = "" +
+        NAME + " VARCHAR(255), " +
+        AIR_DATES + " VARCHAR(255), " +
+        BASE_PRICE + " DOUBLE, " +
+        RATING + " VARCHAR(15)";
 
     private final TicketRegistry ticketRegistry;
 
@@ -36,11 +45,7 @@ public class EventRegistryImpl extends GenericDomainEntityRegistry<Event> implem
 
     @Override
     public Optional<Event> getByName(String name) {
-        if (name == null)
-            return Optional.empty();
-
-        return db.query("SELECT * FROM " + tableName() + " WHERE name = ?", new Object[]{name}, this::newEntity)
-            .stream().findFirst();
+        return getAllByStringColumn(NAME, name).stream().findFirst();
     }
 
     @Override
@@ -52,8 +57,8 @@ public class EventRegistryImpl extends GenericDomainEntityRegistry<Event> implem
 
     private Event update(Event existingEvent, Event event) {
         db.update("UPDATE " + tableName() + " SET name=?, airDates=?, basePrice=?, rating=? WHERE id=?",
-                event.getName(), event.getAirDates().toString(), event.getBasePrice(), event.getRating().name(),
-                existingEvent.getId());
+            event.getName(), event.getAirDates().toString(), event.getBasePrice(), event.getRating().name(),
+            existingEvent.getId());
         return event;
     }
 
@@ -61,16 +66,16 @@ public class EventRegistryImpl extends GenericDomainEntityRegistry<Event> implem
         GeneratedId generatedId = new GeneratedId();
 
         db.update(connection -> {
-                    PreparedStatement ps = connection.prepareStatement(
-                            "INSERT INTO " + tableName() + " (name, airDates, basePrice, rating) VALUES (?, ?, ?, ?)",
-                            RETURN_GENERATED_KEYS);
-                    ps.setString(1, event.getName());
-                    ps.setString(2, event.getAirDates().toString());
-                    ps.setDouble(3, event.getBasePrice());
-                    ps.setString(4, event.getRating().name());
-                    return ps;
-                },
-                generatedId
+                PreparedStatement ps = connection.prepareStatement(
+                    "INSERT INTO " + tableName() + " (name, airDates, basePrice, rating) VALUES (?, ?, ?, ?)",
+                    RETURN_GENERATED_KEYS);
+                ps.setString(1, event.getName());
+                ps.setString(2, event.getAirDates().toString());
+                ps.setDouble(3, event.getBasePrice());
+                ps.setString(4, event.getRating().name());
+                return ps;
+            },
+            generatedId
         );
 
         event.setId(generatedId.get());
@@ -80,11 +85,11 @@ public class EventRegistryImpl extends GenericDomainEntityRegistry<Event> implem
     @Override
     Event newEntity(ResultSet rs, int rowNum) throws SQLException {
         Event event = new Event();
-        event.setId(rs.getLong("id"));
-        event.setName(rs.getString("name"));
-        event.setAirDates(listOfDates(rs.getString("airDates")));
-        event.setBasePrice(rs.getDouble("basePrice"));
-        event.setRating(EventRating.valueOf(rs.getString("rating")));
+        event.setId(rs.getLong(ID));
+        event.setName(rs.getString(NAME));
+        event.setAirDates(listOfDates(rs.getString(AIR_DATES)));
+        event.setBasePrice(rs.getDouble(BASE_PRICE));
+        event.setRating(EventRating.valueOf(rs.getString(RATING)));
         ticketRegistry.getByEvent(event).forEach(event::addTicket);
         return event;
     }

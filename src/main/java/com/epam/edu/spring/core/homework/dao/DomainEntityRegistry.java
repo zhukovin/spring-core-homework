@@ -8,6 +8,8 @@ import java.util.Optional;
 
 public interface DomainEntityRegistry<T extends DomainObject> {
 
+    String ID = "id";
+
     /**
      * Saving new entity to storage or updating existing one
      *

@@ -20,8 +20,16 @@ import static java.util.Optional.ofNullable;
 @Service
 public class TicketRegistryImpl extends GenericDomainEntityRegistry<Ticket> implements TicketRegistry {
 
-    private static final String TABLE_COLUMNS =
-        "userEmail VARCHAR(255), eventName VARCHAR(255) NOT NULL, eventTime TIMESTAMP, seat INTEGER";
+    private static final String USER_EMAIL = "userEmail";
+    private static final String EVENT_NAME = "eventName";
+    private static final String EVENT_TIME = "eventTime";
+    private static final String SEAT = "seat";
+
+    private static final String TABLE_COLUMNS = "" +
+        USER_EMAIL + " VARCHAR(255), " +
+        EVENT_NAME + " VARCHAR(255) NOT NULL, " +
+        EVENT_TIME + " TIMESTAMP, " +
+        SEAT + " INTEGER";
 
 
     @Lazy
@@ -89,26 +97,22 @@ public class TicketRegistryImpl extends GenericDomainEntityRegistry<Ticket> impl
     @Override
     Ticket newEntity(ResultSet rs, int rowNum) throws SQLException {
         Ticket ticket = new Ticket(
-            rs.getString("userEmail"),
-            rs.getString("eventName"),
-            rs.getTimestamp("eventTime").toLocalDateTime(),
-            rs.getLong("seat")
+            rs.getString(USER_EMAIL),
+            rs.getString(EVENT_NAME),
+            rs.getTimestamp(EVENT_TIME).toLocalDateTime(),
+            rs.getLong(SEAT)
         );
-        ticket.setId(rs.getLong("id"));
+        ticket.setId(rs.getLong(ID));
         return ticket;
     }
 
     @Override
     public List<Ticket> getByUser(User user) {
-        return getByStringColumn("userEmail", user.getEmail());
+        return getAllByStringColumn(USER_EMAIL, user.getEmail());
     }
 
     @Override
     public List<Ticket> getByEvent(Event event) {
-        return getByStringColumn("eventName", event.getName());
-    }
-
-    private List<Ticket> getByStringColumn(String name, String value) {
-        return db.query("SELECT * FROM " + tableName() + " WHERE " + name + " = ?", new Object[]{value}, this::newEntity);
+        return getAllByStringColumn(EVENT_NAME, event.getName());
     }
 }

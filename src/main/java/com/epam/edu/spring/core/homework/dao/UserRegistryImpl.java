@@ -17,7 +17,16 @@ import static java.util.Optional.ofNullable;
 @Service
 public class UserRegistryImpl extends GenericDomainEntityRegistry<User> implements UserRegistry {
 
-    private static final String TABLE_COLUMNS = "firstName VARCHAR(255), lastName VARCHAR(255), email VARCHAR(255) UNIQUE, birthday TIMESTAMP";
+    private static final String FIRST_NAME = "firstName";
+    private static final String LAST_NAME = "lastName";
+    private static final String EMAIL = "email";
+    private static final String BIRTHDAY = "birthday";
+
+    private static final String TABLE_COLUMNS = "" +
+        FIRST_NAME + " VARCHAR(255), " +
+        LAST_NAME + " VARCHAR(255), " +
+        EMAIL + " VARCHAR(255) UNIQUE, " +
+        BIRTHDAY + " TIMESTAMP";
 
     private final TicketRegistry ticketRegistry;
 
@@ -83,11 +92,11 @@ public class UserRegistryImpl extends GenericDomainEntityRegistry<User> implemen
     @Override
     User newEntity(ResultSet rs, int rowNum) throws SQLException {
         User user = new User();
-        user.setId(rs.getLong("id"));
-        user.setFirstName(rs.getString("firstName"));
-        user.setLastName(rs.getString("lastName"));
-        user.setEmail(rs.getString("email"));
-        user.setBirthday(rs.getTimestamp("birthday").toLocalDateTime());
+        user.setId(rs.getLong(ID));
+        user.setFirstName(rs.getString(FIRST_NAME));
+        user.setLastName(rs.getString(LAST_NAME));
+        user.setEmail(rs.getString(EMAIL));
+        user.setBirthday(rs.getTimestamp(BIRTHDAY).toLocalDateTime());
         ticketRegistry.getByUser(user).forEach(user::addTicket);
         return user;
     }

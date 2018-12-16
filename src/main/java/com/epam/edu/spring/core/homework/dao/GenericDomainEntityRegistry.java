@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @SuppressWarnings({"SqlNoDataSourceInspection", "SqlResolve"})
@@ -53,4 +54,8 @@ abstract class GenericDomainEntityRegistry<T extends DomainObject> implements Do
     }
 
     abstract T newEntity(ResultSet rs, int rowNum) throws SQLException;
+
+    List<T> getAllByStringColumn(String name, String value) {
+        return db.query("SELECT * FROM " + tableName() + " WHERE " + name + " = ?", new Object[]{value}, this::newEntity);
+    }
 }
