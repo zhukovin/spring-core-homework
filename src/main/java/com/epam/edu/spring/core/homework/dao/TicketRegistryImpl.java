@@ -100,11 +100,15 @@ public class TicketRegistryImpl extends GenericDomainEntityRegistry<Ticket> impl
 
     @Override
     public List<Ticket> getByUser(User user) {
-        return db.query("SELECT * FROM " + tableName() + " WHERE userEmail = ?", new Object[]{user.getEmail()}, this::newEntity);
+        return getByStringColumn("userEmail", user.getEmail());
     }
 
     @Override
     public List<Ticket> getByEvent(Event event) {
-        return db.query("SELECT * FROM " + tableName() + " WHERE eventName = ?", new Object[]{event.getName()}, this::newEntity);
+        return getByStringColumn("eventName", event.getName());
+    }
+
+    private List<Ticket> getByStringColumn(String name, String value) {
+        return db.query("SELECT * FROM " + tableName() + " WHERE " + name + " = ?", new Object[]{value}, this::newEntity);
     }
 }

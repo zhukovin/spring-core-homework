@@ -1,4 +1,5 @@
 add-user a z email
+add-user a z email2
 add-event Matrix 100 HIGH
 list-events
 list-auds
