@@ -1,11 +1,12 @@
 package com.epam.edu.spring.core.homework.shell;
 
-import com.epam.edu.spring.core.homework.service.stats.Counter;
 import com.epam.edu.spring.core.homework.service.stats.DiscountStatisticsRegistry;
 import com.epam.edu.spring.core.homework.service.stats.EventStatisticsRegistry;
 import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
+
+import java.util.Map;
 
 @ShellComponent
 @RequiredArgsConstructor
@@ -33,14 +34,14 @@ public class StatisticsCommands {
     }
 
     @ShellMethod("Get number of discounts per discount type")
-    public Counter<?> statDiscount() {
+    public Map<String, Long> statDiscount() {
         System.out.println("Discounts per type:");
-        return discountStatisticsRegistry.getDiscountsCounter();
+        return discountStatisticsRegistry.getDiscountsCounters();
     }
 
     @ShellMethod("Get number of discounts per user")
-    public Counter<?> statUserDiscount() {
+    public Map<String, Long> statUserDiscount() {
         System.out.println("Discounts per user:");
-        return discountStatisticsRegistry.getUserCounter();
+        return discountStatisticsRegistry.getUserCounters();
     }
 }

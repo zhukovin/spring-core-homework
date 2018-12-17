@@ -1,6 +1,8 @@
 package com.epam.edu.spring.core.homework.service.stats;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Counter<T> extends HashMap<T, Long> {
 
@@ -10,5 +12,9 @@ public class Counter<T> extends HashMap<T, Long> {
 
     public Long value(T key) {
         return getOrDefault(key, 0L);
+    }
+
+    public Map<String, Long> getAll() {
+        return Collections.emptyMap(); // FIXME: stub
     }
 }

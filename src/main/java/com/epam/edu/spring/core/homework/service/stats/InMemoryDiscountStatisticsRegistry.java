@@ -3,6 +3,8 @@ package com.epam.edu.spring.core.homework.service.stats;
 import com.epam.edu.spring.core.homework.domain.User;
 import com.epam.edu.spring.core.homework.service.discount.DiscountStrategy;
 
+import java.util.Map;
+
 public class InMemoryDiscountStatisticsRegistry implements DiscountStatisticsRegistry {
 
     private Counter<Class<? extends DiscountStrategy>> discountTypeCounter = new Counter<>();
@@ -14,8 +16,8 @@ public class InMemoryDiscountStatisticsRegistry implements DiscountStatisticsReg
     }
 
     @Override
-    public Counter<Class<? extends DiscountStrategy>> getDiscountsCounter() {
-        return discountTypeCounter;
+    public Map<String, Long> getDiscountsCounters() {
+        return discountTypeCounter.getAll();
     }
 
     @Override
@@ -24,7 +26,7 @@ public class InMemoryDiscountStatisticsRegistry implements DiscountStatisticsReg
     }
 
     @Override
-    public Counter<User> getUserCounter() {
-        return discountPerUserCounter;
+    public Map<String, Long> getUserCounters() {
+        return discountPerUserCounter.getAll();
     }
 }
