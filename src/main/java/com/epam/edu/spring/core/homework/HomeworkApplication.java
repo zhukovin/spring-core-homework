@@ -77,13 +77,13 @@ public class HomeworkApplication {
 
     @Bean
     public DiscountStatisticsRegistry discountStatisticsRegistry() {
-        return new JdbcDiscountStatisticsRegistry(beanFactory.getBean(JdbcTemplate.class));
+        return new JdbcDiscountStatisticsRegistry(beanFactory.getBean(JdbcTemplate.class)); // <- Manually inject JdbcTemplate
 //        return new InMemoryDiscountStatisticsRegistry();
     }
 
     @Bean
-    public EventStatisticsRegistry eventStatisticsRegistry() {
-        return new JdbcEventStatisticsRegistry(beanFactory.getBean(JdbcTemplate.class));
+    public EventStatisticsRegistry eventStatisticsRegistry(JdbcTemplate db) { // <- Spring is clever enough to inject JdbcTemplate here
+        return new JdbcEventStatisticsRegistry(db);
 //        return new InMemoryDiscountStatisticsRegistry();
     }
 
