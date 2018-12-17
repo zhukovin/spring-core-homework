@@ -22,11 +22,11 @@ public class JdbcEventStatisticsRegistry implements EventStatisticsRegistry {
     @PostConstruct
     private void createTableIfNeeded() {
         db.execute("create table if not exists " + TABLE_NAME + " (" +
-            EVENT_NAME + " VARCHAR(255) NOT NULL, " +
-            GET_NAME_COUNTER + " INTEGER, " +
-            GET_BASE_PRICE_COUNTER + " INTEGER, " +
-            BOOKED_TICKETS_COUNTER + " INTEGER " +
-            ")");
+                EVENT_NAME + " VARCHAR(255) NOT NULL, " +
+                GET_NAME_COUNTER + " INTEGER, " +
+                GET_BASE_PRICE_COUNTER + " INTEGER, " +
+                BOOKED_TICKETS_COUNTER + " INTEGER " +
+                ")");
     }
 
     @Override
@@ -64,17 +64,22 @@ public class JdbcEventStatisticsRegistry implements EventStatisticsRegistry {
     }
 
     private void setCounter(String eventName, String counterName, long value) {
-        db.update("UPDATE " + TABLE_NAME + " SET " + counterName + " = ? WHERE " + EVENT_NAME + " = ?",
-            value, eventName);
+        assertSingleRowUpdated(
+                db.update("UPDATE " + TABLE_NAME + " SET " + counterName + " = ? WHERE " + EVENT_NAME + " = ?",
+                        value, eventName));
+    }
+
+    private void assertSingleRowUpdated(int numberOfUpdatedRows) {
+        if (numberOfUpdatedRows != 1)
+            throw new InternalError("Counter update must affect one row exactly");
     }
 
     private long counterValue(String eventName, String counterName) {
         try {
             return ofNullable(db.queryForObject("SELECT " + counterName + " FROM " + TABLE_NAME +
-                " WHERE " + EVENT_NAME + " = ?", new Object[]{eventName}, Long.class)).orElse(0L);
-        }
-        catch (IncorrectResultSizeDataAccessException e) {
-            setCounter(eventName, counterName, 0);
+                    " WHERE " + EVENT_NAME + " = ?", new Object[]{eventName}, Long.class)).orElse(0L);
+        } catch (IncorrectResultSizeDataAccessException e) {
+            db.update("INSERT INTO " + TABLE_NAME + " (" + EVENT_NAME + ") VALUES (?)", eventName);
             return 0;
         }
     }

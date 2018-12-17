@@ -16,28 +16,31 @@ public class StatisticsCommands {
 
     @ShellMethod("Get number of Event.getName() calls")
     public Long statEventGetName(String eventName) {
+        System.out.println("Number of Event.getName() calls:");
         return eventStatisticsRegistry.numberOfGetNameCalls(eventName);
     }
 
     @ShellMethod("Get number of Event.getBasePrice() calls")
     public Long statEventGetPrice(String eventName) {
+        System.out.println("Number of Event.getBasePrice() calls:");
         return eventStatisticsRegistry.numberOfGetBasePriceCalls(eventName);
     }
 
     @ShellMethod("Get number of booked tickets")
     public Long statEventTickets(String eventName) {
+        System.out.println("Number of booked tickets:");
         return eventStatisticsRegistry.numberOfBookedTickets(eventName);
     }
 
     @ShellMethod("Get number of discounts per discount type")
     public Counter<?> statDiscount() {
-        System.out.println("Discounts per type");
+        System.out.println("Discounts per type:");
         return discountStatisticsRegistry.getDiscountsCounter();
     }
 
     @ShellMethod("Get number of discounts per user")
     public Counter<?> statUserDiscount() {
-        System.out.println("Discounts per user");
+        System.out.println("Discounts per user:");
         return discountStatisticsRegistry.getUserCounter();
     }
 }

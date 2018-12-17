@@ -2,6 +2,7 @@ package com.epam.edu.spring.core.homework.dao;
 
 import com.epam.edu.spring.core.homework.domain.Event;
 import com.epam.edu.spring.core.homework.domain.EventRating;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -31,11 +32,13 @@ public class EventRegistryImpl extends GenericDomainEntityRegistry<Event> implem
         RATING + " VARCHAR(15)";
 
     private final TicketRegistry ticketRegistry;
+    private final BeanFactory beanFactory;
 
     @Autowired
-    public EventRegistryImpl(JdbcTemplate db, TicketRegistry ticketRegistry) {
+    public EventRegistryImpl(JdbcTemplate db, TicketRegistry ticketRegistry, BeanFactory beanFactory) {
         super(db);
         this.ticketRegistry = ticketRegistry;
+        this.beanFactory = beanFactory;
     }
 
     @Override
@@ -84,7 +87,7 @@ public class EventRegistryImpl extends GenericDomainEntityRegistry<Event> implem
 
     @Override
     Event newEntity(ResultSet rs, int rowNum) throws SQLException {
-        Event event = new Event();
+        Event event = beanFactory.getBean(Event.class);
         event.setId(rs.getLong(ID));
         event.setName(rs.getString(NAME));
         event.setAirDates(listOfDates(rs.getString(AIR_DATES)));

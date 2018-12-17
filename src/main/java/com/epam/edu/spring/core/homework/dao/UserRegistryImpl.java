@@ -1,6 +1,7 @@
 package com.epam.edu.spring.core.homework.dao;
 
 import com.epam.edu.spring.core.homework.domain.User;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -29,11 +30,13 @@ public class UserRegistryImpl extends GenericDomainEntityRegistry<User> implemen
         BIRTHDAY + " TIMESTAMP";
 
     private final TicketRegistry ticketRegistry;
+    private final BeanFactory beanFactory;
 
     @Autowired
-    public UserRegistryImpl(JdbcTemplate db, TicketRegistry ticketRegistry) {
+    public UserRegistryImpl(JdbcTemplate db, TicketRegistry ticketRegistry, BeanFactory beanFactory) {
         super(db);
         this.ticketRegistry = ticketRegistry;
+        this.beanFactory = beanFactory;
     }
 
     @Override
@@ -91,7 +94,7 @@ public class UserRegistryImpl extends GenericDomainEntityRegistry<User> implemen
 
     @Override
     User newEntity(ResultSet rs, int rowNum) throws SQLException {
-        User user = new User();
+        User user = beanFactory.getBean(User.class);
         user.setId(rs.getLong(ID));
         user.setFirstName(rs.getString(FIRST_NAME));
         user.setLastName(rs.getString(LAST_NAME));
