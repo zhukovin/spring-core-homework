@@ -1,1 +1,1 @@
-java -jar target/homework-1.0.0-SNAPSHOT.jar
+java -jar target/homework-3.0.0.jar
